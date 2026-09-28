@@ -8,6 +8,7 @@ from asteroidfield import AsteroidField
 from logger import log_event
 from shot import Shot
 from pointboard import Pointboard
+from calculate import calc_points_from_kill
 
 def main():
     pygame.init()
@@ -41,7 +42,7 @@ def main():
                     log_event("asteroid_shot")
                     asteroid.split()
                     shot.kill()
-                    scoreboard.add_amount(VALUE_ASTEROID_KILL)
+                    scoreboard.add_amount(calc_points_from_kill(asteroid))
             if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
