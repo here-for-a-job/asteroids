@@ -1,6 +1,6 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, NUM_LIVES, INVULNERABLE_DURATION
 from shot import Shot
 
 class Player(CircleShape):
@@ -8,6 +8,8 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation:int = 0
         self.shot_cooldown_timer:float = 0
+        self.lives = NUM_LIVES
+        self.invulnerable_time_left = 0
 
       # in the Player class
     def triangle(self) -> list[pygame.Vector2]:
@@ -25,6 +27,11 @@ class Player(CircleShape):
         self.rotation += PLAYER_TURN_SPEED * dt
 
     def update(self, dt: float) -> None:
+        if self.invulnerable_time_left > 0:
+            self.invulnerable_time_left -= dt
+            if self.invulnerable_time_left <=0:
+                self.can_collide = True
+
         self.shot_cooldown_timer -= dt
         keys = pygame.key.get_pressed()
 
@@ -53,3 +60,8 @@ class Player(CircleShape):
         shot.velocity = pygame.Vector2(0, 1)
         shot.velocity = shot.velocity.rotate(self.rotation)
         shot.velocity *= PLAYER_SHOOT_SPEED
+
+    def lose_life(self):
+        self.lives -= 1
+        self.can_collide = False
+        self.invulnerable_time_left = INVULNERABLE_DURATION

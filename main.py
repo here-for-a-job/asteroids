@@ -30,6 +30,7 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
     player = Player(x, y)
+    livesboard = Pointboard("LIVES LEFT", player.lives, 10, 10)
     while True:
         log_state()
         for event in pygame.event.get():
@@ -45,8 +46,12 @@ def main():
                     scoreboard.add_amount(calc_points_from_kill(asteroid))
             if asteroid.collides_with(player):
                 log_event("player_hit")
-                print("Game over!")
-                sys.exit()
+                asteroid.split()
+                player.lose_life()
+                livesboard.add_amount(-1)
+                if player.lives <=0:
+                    print("Game over!")
+                    sys.exit()
         screen.fill("black")
         for object in drawable:
             object.draw(screen)
