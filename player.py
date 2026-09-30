@@ -6,6 +6,7 @@ from shot import Shot
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
+        self.init_arg = {"x":x, "y":y}
         self.rotation:int = 0
         self.shot_cooldown_timer:float = 0
         self.lives = NUM_LIVES
@@ -65,3 +66,6 @@ class Player(CircleShape):
         self.lives -= 1
         self.can_collide = False
         self.invulnerable_time_left = INVULNERABLE_DURATION
+
+    def reset(self):
+        self.__init__(**self.init_arg)

@@ -19,11 +19,12 @@ def main():
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     pointboards = pygame.sprite.Group()
-    Player.containers = (updatable, drawable)
-    Asteroid.containers = (asteroids, updatable, drawable)
-    AsteroidField.containers = (updatable)
-    Shot.containers = (shots, updatable, drawable)
-    Pointboard.containers = (pointboards, drawable)
+    resetable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable, resetable)
+    Asteroid.containers = (asteroids, updatable, drawable, resetable)
+    AsteroidField.containers = (updatable, resetable)
+    Shot.containers = (shots, updatable, drawable, resetable)
+    Pointboard.containers = (pointboards, drawable, resetable)
     asteroid_field = AsteroidField()
     scoreboard = Pointboard("SCORE", 0, 1000, 10)
     dt = 0.0
@@ -50,16 +51,15 @@ def main():
                 player.lose_life()
                 livesboard.add_amount(-1)
                 if player.lives <=0:
-                    print("Game over!")
-                    sys.exit()
+                    for object in resetable:
+                        object.reset()
         screen.fill("black")
         for object in drawable:
             object.draw(screen)
         pygame.display.flip()
         dt = clock.tick(60) / 1000
-    print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
+        if pygame.key.get_pressed()[pygame.K_q]:
+            sys.exit()
 
 
 if __name__ == "__main__":

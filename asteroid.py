@@ -29,3 +29,6 @@ class Asteroid(CircleShape):
         asteroid1.velocity = velocity1 * 1.2
         asteroid2 = Asteroid(x, y, new_radius)
         asteroid2.velocity = velocity2 * 1.2
+
+    def reset(self):
+        self.kill()

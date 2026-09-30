@@ -10,6 +10,7 @@ class Pointboard(pygame.sprite.Sprite):
         else:
             super().__init__(*self.containers)
 
+        self.init_arg = {"name":name, "amount":amount, "x":x, "y":y}
         self.name:str = name
         self.current_amount:int = amount
         self.x:float = x
@@ -42,3 +43,6 @@ class Pointboard(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (125, 125, 125), self.surface_border, width=POINTBOARD_BORDER_THICKNESS)
         screen.blit(self.surface_name, self.surface_name_pos)
         screen.blit(self.surface_amount, self.surface_amount_pos)
+
+    def reset(self):
+        self.__init__(**self.init_arg)
